@@ -1,0 +1,9 @@
+clear_previous_screenshots true
+tests_apk_path 'app/build/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk'
+app_apk_path 'app/build/outputs/apk/prod/debug/app-prod-screenshots.apk'
+tests_package_name 'your.package.name.test'
+app_package_name 'your.package.name'
+locales LOCALES
+exit_on_test_failure false
+reinstall_app false
+use_tests_in_classes ["com.example.ScreenshotsTest"]

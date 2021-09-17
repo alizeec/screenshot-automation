@@ -1,0 +1,40 @@
+{
+  "values": [
+    {
+      "country": "fr-FR",
+      "fontId": "eddd-11ea-9c65-ce2ec6ff9351",
+      "configs": [
+        {
+          "name": "intro",
+          "text": "Le (super) marché du reconditionné "
+        },
+        {
+          "name": "home",
+          "text": "C’est pas neuf, c’est <c=#91DBA7>nouveau</c>"
+        },
+        {
+          "name": "search",
+          "text": "Un large choix d’appareils <c=#91DBA7>reconditionnés</c>"
+        }
+      ]
+    },
+    {
+      "country": "en-US",
+      "fontId": "eddd-11ea-9c65-ce2ec6ff9351",
+      "configs": [
+        {
+          "name": "intro",
+          "text": "Rethink \\n refurbished."
+        },
+        {
+          "name": "home",
+          "text": "It’s not new,\\n it’s <c=#91DBA7>novel</c>"
+        },
+        {
+          "name": "search",
+          "text": "A huge selection of <c=#91DBA7>renewed electronics</c>"
+        }
+      ]
+    }
+  ]
+}

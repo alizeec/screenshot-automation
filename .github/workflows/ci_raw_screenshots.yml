@@ -1,0 +1,65 @@
+name: Generate raw screenshots
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      languages:
+        description: 'List of languages'
+        # Default value if no value is explicitly provided
+        default: '["fr-FR","en-US"]'
+        # Input has to be provided for the workflow to run
+        required: true
+
+jobs:
+  raw-screenshots:
+    name: Generate raw screenshots and upload them on Firebase Storage
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - name: Cache Gradle packages
+        uses: actions/cache@v2.1.6
+        with:
+          path: |
+            ~/.gradle/caches
+            .gradle
+          key: ${{ runner.os }}-gradle-rw-screenshots-${{ hashFiles('**/*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-rw-screenshots-
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradlew') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-wrapper-
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+          bundler-cache: true
+      - name: create AVD and generate raw screenshots
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 23
+          arch: x86
+          profile: pixel_xl
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-build: 7425822
+          disable-animations: true
+          sdcard-path-or-size: 1000M
+          script: sed -i -e 's/LOCALES/${{ github.event.inputs.languages }}/' "fastlane/Screengrabfile" && fastlane generateScreenshots
+      - name: rename raw screenshots and upload on Firebase
+        run: ./gradlew processRawScreenshots -PfirebaseKey="${{ secrets.PATH_TO_YOUR_JSON_KEY_FILE }}"
+      - name: Upload screenshots in atrifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: screenshots
+          path: ./**/fastlane/metadata/android/**.jpeg
