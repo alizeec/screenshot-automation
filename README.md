@@ -22,4 +22,4 @@ At this stage a manual check can be done, to be sure the screenshots are OK.
 # Outputs
 | Intro | Home |
 | ----- | ------ |
-| <img height="800" alt="intro" src="https://user-images.githubusercontent.com/4083164/133794304-4a13cb99-509a-4286-9323-ffffc8fb008c.jpeg"> | <img height="800" alt="home" src="https://user-images.githubusercontent.com/4083164/133794325-3c79f18a-e5c2-4cd5-a453-420e9b700f62.jpeg"> |
+| <img alt="intro" src="https://user-images.githubusercontent.com/4083164/133794304-4a13cb99-509a-4286-9323-ffffc8fb008c.jpeg"> | <img alt="home" src="https://user-images.githubusercontent.com/4083164/133794325-3c79f18a-e5c2-4cd5-a453-420e9b700f62.jpeg"> |
