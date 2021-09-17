@@ -18,3 +18,8 @@ At this stage a manual check can be done, to be sure the screenshots are OK.
 - Second step: call [Abyssale](https://www.abyssale.com/) API to generate pretty screenshots
 - Third step: download the JSON key file in order to be able to push on the Playstore
 - Fourth step: push all new screenshots to the Playstore using [Fastlane](http://docs.fastlane.tools/actions/supply/#supply)
+
+# Outputs
+| Intro | Home |
+| ----- | ------ |
+| <img height="800" alt="intro" src="https://user-images.githubusercontent.com/4083164/133794304-4a13cb99-509a-4286-9323-ffffc8fb008c.jpeg"> | <img height="800" alt="home" src="https://user-images.githubusercontent.com/4083164/133794325-3c79f18a-e5c2-4cd5-a453-420e9b700f62.jpeg"> |
