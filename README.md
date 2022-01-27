@@ -2,7 +2,8 @@
 
 A sample to showcase the screenshot automation with Fastlane and Abyssale
 
-<img width="1438" alt="Capture d’écran 2021-09-16 à 11 52 26" src="https://user-images.githubusercontent.com/4083164/133786183-4e097d73-e337-4b05-af51-796a03bf5c41.png">
+<img width="1014" alt="Capture d’écran 2022-01-27 à 15 55 52" src="https://user-images.githubusercontent.com/4083164/151383729-861e923b-fc45-4f6f-92ca-e3f641497a3f.png">
+
 
 This demo project show how we can automate the full screenshot generation and upload on the Playstore. The CI we use is Github Actions. 
 There is two workflow:
