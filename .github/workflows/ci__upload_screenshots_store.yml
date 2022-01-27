@@ -1,0 +1,67 @@
+name: Upload screenshots on the store
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      versionCode:
+        description: 'Last version code of the app. Ex: 310'
+        # Input has to be provided for the workflow to run
+        required: true
+
+jobs:
+  upload-screenshots-store:
+    name: Upload on store
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - name: Cache Gradle packages
+        uses: actions/cache@v2.1.7
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-pretty-screenshots-${{ hashFiles('**/*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-pretty-screenshots-
+
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v2.1.7
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-wrapper-
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+          bundler-cache: true
+
+      - name: Download screenshots from artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ci_screenshots.yml
+          workflow_conclusion: success
+          name: finalScreenshots
+          path: fastlane/
+          check_artifacts: true
+
+      - name: download JSON key file
+        run: ./gradlew downloadAuthJsonStore -PstoreAuthKey="${{ secrets.PATH_TO_YOUR_JSON_KEY }}"
+
+      - name: upload screenshots on store
+        run: fastlane sendScreenshotsStore versionCode:${{ github.event.inputs.versionCode }}
+
+      - name: Upload screenshots in atrifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: uploadedScreenshots
+          path: fastlane/
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -Dfile.encoding=UTF-8 -XX:MaxPermSize=2048m" -Dorg.gradle.vfs.watch=false -Dkapt.incremental.apt=false -Dandroid.databinding.incremental=false

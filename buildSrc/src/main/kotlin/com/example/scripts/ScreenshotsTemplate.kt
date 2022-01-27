@@ -23,7 +23,7 @@ internal fun GenerateFinalScreenshots.screenshotTemplate(
           "alignment": "middle center"
         },
         "screenshot": {
-          "image_url": "$image",
+          "image_encoded": "$image",
           "fitting_type": "fill",
           "alignment": "top left"
         },

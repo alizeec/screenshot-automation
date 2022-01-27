@@ -1,6 +1,6 @@
 import com.example.scripts.screenshots.DownloadAuthJsonStore
 import com.example.scripts.screenshots.GenerateFinalScreenshots
-import com.example.scripts.screenshots.RenameAndUploadRawScreenshots
+import com.example.scripts.screenshots.RenameRawScreenshots
 
 val apiKey: String by project
 val countries: String by project
@@ -18,12 +18,7 @@ task<GenerateFinalScreenshots>("generateFinalScreenshots") {
     outputDirectoryForPersonalizedStore = project.file("fastlane/metadata/personalizedStore")
 }
 
-val firebaseKey: String by project
-task<RenameAndUploadRawScreenshots>("processRawScreenshots") {
-    if (project.hasProperty("firebaseKey")) {
-        firebaseStorageKey = firebaseKey
-    }
-
+task<RenameRawScreenshots>("processRawScreenshots") {
     outputDirectory = project.file(".")
 }
 

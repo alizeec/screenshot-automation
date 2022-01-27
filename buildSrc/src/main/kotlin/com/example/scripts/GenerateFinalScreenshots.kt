@@ -52,23 +52,11 @@ open class GenerateFinalScreenshots : DefaultTask() {
         val countryJsonAdapter = moshi.adapter(StoreScreenshots::class.java)
         val countyConfigurations = countryJsonAdapter.fromJson(countryConfigurationsJson)?.values
 
-        val configs = mutableListOf<ScreenshotConfig>()
-        countyConfigurations?.let {
-            for (country in it) {
-                val selectedLocales = locales
-                val selectedLocalesParsed = selectedLocales?.replace("\"", "")?.replace("[", "")
-                    ?.replace("]", "")?.split(",") ?: emptyList()
+        // create all configuration for all screenshots
+        val configs = createScreenshotsConfigurations(countyConfigurations)
 
-                if (selectedLocales.isNullOrBlank() || selectedLocalesParsed.contains(country.country)) {
-                    for (screen in country.configs) {
-                        val imageUrl = "$FIREBASE_STORAGE_PATH${screen.name}-${country.country}.png?alt=media"
-                        val config = createTemplateScreenshotConfig(screen, country, imageUrl)
-                        configs.add(config)
-                    }
-                    counter = 1
-                }
-            }
-        }
+        // clean the existing raw screenshots from the folders
+        cleanRawScreenshots()
 
         println("🚀 call Abyssale API")
         for (config in configs) {
@@ -86,16 +74,43 @@ open class GenerateFinalScreenshots : DefaultTask() {
         }
     }
 
+    private fun createScreenshotsConfigurations(countyConfigurations: List<StoreScreenshotCountry>?):
+            MutableList<ScreenshotConfig> {
+        val configs = mutableListOf<ScreenshotConfig>()
+        countyConfigurations?.let {
+            for (country in it) {
+                val selectedLocales = locales
+                val selectedLocalesParsed = selectedLocales?.replace("\"", "")
+                        ?.replace("[", "")
+                        ?.replace("]", "")?.split(",") ?: emptyList()
+
+                if (selectedLocales.isNullOrBlank() || selectedLocalesParsed.contains(country.country)) {
+                    for (screen in country.configs) {
+                        val image = if (screen.name != "intro") {
+                            val path =
+                                    "fastlane/metadata/android/${country.country}/images/phoneScreenshots/${screen.name}-${country.country}.png"
+                            Base64.getEncoder().encodeToString(File(path).readBytes())
+                        } else ""
+                        val config = createTemplateScreenshotConfig(screen, country, image)
+                        configs.add(config)
+                    }
+                    counter = 1
+                }
+            }
+        }
+        return configs
+    }
+
     private fun createTemplateScreenshotConfig(
         screen: StoreScreenshotConfig,
         country: StoreScreenshotCountry,
-        imageUrl: String
+        image: String
     ): ScreenshotConfig {
         val attributes = ConfigAttributes(
             name = "$counter-${screen.name}",
             title = screen.text,
             country = country.country,
-            imageUrl = imageUrl,
+            image = image,
             fontId = country.fontId
         )
         counter++
@@ -164,6 +179,15 @@ open class GenerateFinalScreenshots : DefaultTask() {
         }
 
         println("File $nameFile.jpeg saved ✅")
+    }
+
+    private fun cleanRawScreenshots() {
+        File(PATH_START).walk().forEach {
+            if (it.isFile && it.isHidden.not() && it.name != "screenshots.html") {
+                val source = Paths.get(it.path)
+                Files.delete(source)
+            }
+        }
     }
 
     companion object {

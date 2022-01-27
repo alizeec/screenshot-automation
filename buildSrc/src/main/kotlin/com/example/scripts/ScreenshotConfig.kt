@@ -6,14 +6,14 @@ internal sealed class ScreenshotConfig(
     open val title: String,
     val hideCat: Boolean = true,
     open val fontId: String,
-    open val imageUrl: String
+    open val image: String
 ) {
     data class IntroConfig(val attributes: ConfigAttributes) : ScreenshotConfig(
         name = attributes.name,
         title = attributes.title,
         country = attributes.country,
         hideCat = false,
-        imageUrl = attributes.imageUrl,
+        image = attributes.image,
         fontId = attributes.fontId
     )
     data class HomeConfig(val attributes: ConfigAttributes) : ScreenshotConfig(
@@ -21,7 +21,7 @@ internal sealed class ScreenshotConfig(
         title = attributes.title,
         country = attributes.country,
         hideCat = false,
-        imageUrl = attributes.imageUrl,
+        image = attributes.image,
         fontId = attributes.fontId
     )
 
@@ -30,7 +30,7 @@ internal sealed class ScreenshotConfig(
         title = attributes.title,
         country = attributes.country,
         hideCat = true,
-        imageUrl = attributes.imageUrl,
+        image = attributes.image,
         fontId = attributes.fontId
     )
 }
@@ -39,6 +39,6 @@ data class ConfigAttributes(
     val name: String,
     val title: String,
     val country: String,
-    val imageUrl: String,
+    val image: String,
     val fontId: String
 )
